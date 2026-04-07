@@ -1,0 +1,206 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    display: flex;
+    min-height: 100vh;
+    color: #333;
+    background-image: url("/images/Escudo_pascual.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #808080
+}
+
+.main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 50px;
+}
+
+h1 {
+    font-size: 3.5em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #7f8c8d;
+    font-weight: normal;
+}
+
+.sidebar {
+    width: 60px;
+    background-color: #2c3e50;
+    color: white;
+    padding-top: 20px;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+    .sidebar:hover {
+        width: 200px;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar li {
+        margin-bottom: 10px;
+    }
+
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        text-decoration: none;
+        color: white;
+        font-size: 1.1em;
+        white-space: nowrap;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+    .sidebar .initial {
+        font-weight: bold;
+        margin-right: 15px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .sidebar .full-text {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        flex-grow: 1;
+    }
+
+    .sidebar:hover .full-text {
+        opacity: 1;
+        visibility: visible;
+    }
+
+.content {
+    max-width: 800px;
+    text-align: center;
+    line-height: 1.6;
+    color: #555;
+}
+
+    .content p {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+    }
+
+.login-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+    .login-container h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        font-weight: 800;
+    }
+
+    .login-container h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+input::placeholder {
+    color: #b3b3b3;
+}
+
+button {
+    width: 100%;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    button:hover {
+        background-color: #1e4ed8;
+    }
+
+.btn-modern {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #0078D7, #005FB8);
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.25);
+    transition: all 0.25s ease-in-out;
+    margin-top: 10px;
+}
+
+    .btn-modern:hover {
+        transform: translateY(-3px) scale(1.03);
+        background: linear-gradient(135deg, #0884F5, #0064C4);
+    }
+
+    .btn-modern:active {
+        transform: translateY(1px) scale(0.98);
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.18);
+    }
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 15px;
+    font-weight: 500;
+}

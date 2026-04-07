@@ -1,0 +1,24 @@
+{
+  "name": "eventos-universitarios",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de eventos universitarios",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mssql": "^9.1.1",
+    "ejs": "^3.1.9",
+    "body-parser": "^1.20.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["eventos", "universidad", "express", "nodejs"],
+  "author": "Institución Universitaria Pascual Bravo",
+  "license": "MIT"
+}

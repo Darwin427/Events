@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/Modelo.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/asistente/dashboard">
+                        <span class="initial">P</span>
+                        <span class="full-text">Panel Principal</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/asistente/calendar">
+                        <span class="initial">C</span>
+                        <span class="full-text">Calendario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/asistente/registro">
+                        <span class="initial">R</span>
+                        <span class="full-text">Registros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <span class="initial">S</span>
+                        <span class="full-text">Salir</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <div class="main-container">
+        <header>
+            <h1>Registro a Eventos</h1>
+            <h2>Inscripción a Ponencias</h2>
+        </header>
+
+        <section class="content">
+            <p>Bienvenido al sistema de registro de eventos.</p>
+            <p>Aquí podrás:</p>
+            <ul>
+                <li>Inscribirte en las ponencias disponibles</li>
+                <li>Ver descripciones detalladas de cada evento</li>
+                <li>Consultar tu historial de inscripciones</li>
+                <li>Cancelar inscripciones si es necesario</li>
+            </ul>
+            
+            <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                <h3>Eventos Disponibles</h3>
+                <p>Las ponencias aprobadas y disponibles para inscripción aparecerán aquí.</p>
+                <p>Podrás leer la descripción y decidir cuáles te interesan.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

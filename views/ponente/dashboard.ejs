@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/Modelo.css">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f0f2f5; 
+            margin: 0; 
+            padding: 20px; 
+            color: #333; 
+            display:flex; 
+            flex-direction:column; 
+            align-items:center; 
+            min-height:100vh;
+        }
+        .main-container { 
+            background-color:#fff; 
+            border-radius:12px; 
+            box-shadow:0 6px 20px rgba(0,0,0,0.1); 
+            width:100%; 
+            max-width:900px; 
+            padding:30px; 
+            margin-bottom:30px;
+        }
+        h1 { 
+            color:#007bff; 
+            text-align:center; 
+            margin-bottom:30px; 
+            font-size:2.5em;
+        }
+        h2 { 
+            color:#333; 
+            border-bottom:1px solid #eee; 
+            padding-bottom:10px; 
+            margin-top:40px; 
+            margin-bottom:25px; 
+            font-size:1.8em;
+        }
+        .form-group { 
+            margin-bottom:18px;
+        }
+        .form-group label { 
+            display:block; 
+            margin-bottom:8px; 
+            font-weight:600; 
+            color:#555; 
+            font-size:1em;
+        }
+        .form-group input[type="text"], 
+        .form-group input[type="number"], 
+        .form-group input[type="date"], 
+        .form-group textarea { 
+            width:100%; 
+            padding:12px; 
+            border:1px solid #ccc; 
+            border-radius:8px; 
+            font-size:1em; 
+            box-sizing:border-box;
+        }
+        .form-group textarea { 
+            resize:vertical; 
+            min-height:80px;
+        }
+        .submit-btn { 
+            background-color:#007bff; 
+            color:white; 
+            border:none; 
+            padding:12px 25px; 
+            border-radius:8px; 
+            cursor:pointer; 
+            font-size:1.1em; 
+            font-weight:500; 
+            width:100%; 
+            margin-top:25px;
+        }
+        .submit-btn:hover { 
+            background-color:#0056b3;
+        }
+        .submitted-event-card { 
+            background-color:#e9f7ef; 
+            border:1px solid #28a745; 
+            border-radius:10px; 
+            padding:20px; 
+            margin-bottom:15px; 
+            display:flex; 
+            flex-direction:column; 
+            gap:8px; 
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        .submitted-event-card h4 { 
+            margin:0; 
+            color:#155724; 
+            font-size:1.4em;
+        }
+        .submitted-event-card p { 
+            margin:0; 
+            color:#444; 
+            font-size:1em;
+        }
+        .submitted-event-card .status { 
+            font-weight:700; 
+            color:#007bff; 
+            text-decoration:underline; 
+            margin-top:10px;
+        }
+        .submitted-event-card .document-link { 
+            color:#007bff; 
+            text-decoration:none; 
+            font-weight:500;
+        }
+        .submitted-event-card .document-link:hover { 
+            color:#0056b3; 
+            text-decoration:underline;
+        }
+        .no-submitted-events { 
+            text-align:center; 
+            color:#777; 
+            padding:20px; 
+            font-size:1.1em;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/ponente/dashboard">
+                        <span class="initial">P</span>
+                        <span class="full-text">Panel Principal</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <span class="initial">S</span>
+                        <span class="full-text">Salir</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-container">
+        <h1>Envío de Propuestas de Eventos</h1>
+
+        <% if (mensaje) { %>
+            <div class="message <%= mensajeTipo %>"><%= mensaje %></div>
+        <% } %>
+
+        <div class="event-form-card">
+            <h3>Enviar Propuesta de Evento</h3>
+
+            <form action="/ponente/enviar-propuesta" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Nombre de la Empresa:</label>
+                    <input type="text" name="companyName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tema:</label>
+                    <input type="text" name="topic" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Idea Principal:</label>
+                    <textarea name="idea" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Visión del Evento:</label>
+                    <textarea name="vision" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Documento de la Exposición (PDF/PPT):</label>
+                    <input type="file" name="documento" accept=".pdf,.ppt,.pptx" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Alcance Esperado:</label>
+                    <input type="number" name="expectedReach" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha Tentativa:</label>
+                    <input type="date" name="tentativeDate" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Enviar Propuesta</button>
+            </form>
+        </div>
+
+        <h2>Propuestas Enviadas</h2>
+
+        <% if (propuestas && propuestas.length > 0) { %>
+            <% propuestas.forEach(function(propuesta) { %>
+                <div class="submitted-event-card">
+                    <h4><%= propuesta.Tema %></h4>
+                    <p><strong>Empresa:</strong> <%= propuesta.NombreEmpresa %></p>
+                    <p><strong>Idea Principal:</strong> <%= propuesta.IdeaPrincipal %></p>
+                    <p><strong>Visión:</strong> <%= propuesta.Vision %></p>
+                    <p><strong>Alcance Esperado:</strong> <%= propuesta.AlcanceEsperado %></p>
+                    <p><strong>Fecha Tentativa:</strong> <%= new Date(propuesta.FechaTentativa).toLocaleDateString() %></p>
+                    <% if (propuesta.Documento) { %>
+                        <p><a href="/uploads/<%= propuesta.Documento %>" class="document-link" target="_blank">Ver Documento</a></p>
+                    <% } %>
+                    <div class="status">Estado: <%= propuesta.Estado || 'Pendiente' %></div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-submitted-events">No has enviado propuestas aún.</div>
+        <% } %>
+    </div>
+</body>
+</html>

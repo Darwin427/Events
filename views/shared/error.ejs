@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/Modelo.css">
+    <style>
+        .error-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        .error-code {
+            font-size: 4em;
+            color: #dc3545;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code"><%= title.includes('404') ? '404' : '500' %></div>
+        <h1><%= title %></h1>
+        <p class="error-message"><%= message %></p>
+        <a href="/inicio" class="back-btn">Volver al inicio</a>
+    </div>
+</body>
+</html>
