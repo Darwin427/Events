@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/ponente-header', { session: session, headerSubtitle: 'Detalle de propuesta' }) %>
+
+    <main class="pb-main" style="max-width: 880px;">
+        <div style="margin-bottom: 20px;">
+            <a href="/ponente/dashboard" style="font-size: 13px;">← Volver a mis propuestas</a>
+        </div>
+
+        <% const stateClass = 'pb-card-status-' + (propuesta.Estado === 'pendiente' ? 'pending' : propuesta.Estado === 'aprobada' ? 'approved' : propuesta.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+        <% const pillClass = 'pb-pill-' + (propuesta.Estado === 'pendiente' ? 'pending' : propuesta.Estado === 'aprobada' ? 'approved' : propuesta.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+
+        <div class="pb-card <%= stateClass %>" style="margin-bottom: 16px;">
+            <div style="padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+                    <h1 style="margin: 0; font-size: 24px;"><%= propuesta.Tema %></h1>
+                    <span class="pb-pill <%= pillClass %>"><%= propuesta.Estado %></span>
+                </div>
+                <p style="color: var(--neutral-500); margin: 0 0 16px;">
+                    <%= propuesta.NombreEmpresa ? propuesta.NombreEmpresa : 'Universidad Pascual Bravo (interno)' %>
+                </p>
+
+                <% if (propuesta.Estado === 'aprobada' && propuesta.FechaDefinitiva) { %>
+                    <div style="background: var(--state-success-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 20px;">
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #1B5E20; font-weight: 700; margin-bottom: 10px;">✓ Detalles del evento aprobado</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 24px; font-size: 14px; color: #1B5E20;">
+                            <div><span style="opacity: 0.7;">Fecha:</span> <strong><%= formatDate(propuesta.FechaDefinitiva) %></strong></div>
+                            <div><span style="opacity: 0.7;">Hora:</span> <strong><%= propuesta.HoraInicio %> — <%= propuesta.HoraFin %></strong></div>
+                            <div><span style="opacity: 0.7;">Lugar:</span> <strong><%= propuesta.Lugar %></strong></div>
+                            <div><span style="opacity: 0.7;">Cupo máximo:</span> <strong><%= propuesta.CupoMaximo %> personas</strong></div>
+                        </div>
+                    </div>
+                <% } else if (propuesta.Estado === 'rechazada' && propuesta.MotivoRechazo) { %>
+                    <div class="pb-alert pb-alert-danger" style="margin-bottom: 20px;">
+                        <span>⚠️</span>
+                        <span><strong>Motivo del rechazo:</strong> <%= propuesta.MotivoRechazo %></span>
+                    </div>
+                <% } else if (propuesta.Estado === 'cancelada') { %>
+                    <div class="pb-alert" style="background: var(--neutral-100); color: var(--neutral-700); border-left: 3px solid var(--neutral-500); margin-bottom: 20px;">
+                        <span>ℹ️</span>
+                        <span>Esta propuesta fue cancelada y no será revisada.</span>
+                    </div>
+                <% } %>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 28px; margin-bottom: 24px; padding-top: 16px; border-top: 1px solid var(--neutral-200);">
+                    <div>
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 4px;">Alcance esperado</div>
+                        <div style="font-size: 15px; font-weight: 500;"><%= propuesta.AlcanceEsperado %> personas</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 4px;">Fecha tentativa</div>
+                        <div style="font-size: 15px; font-weight: 500;"><%= formatDate(propuesta.FechaTentativa) %></div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 4px;">Enviada</div>
+                        <div style="font-size: 15px; font-weight: 500;"><%= formatDate(propuesta.FechaEnvio) %></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 6px;">Idea principal</div>
+                    <p style="margin: 0; line-height: 1.6;"><%= propuesta.IdeaPrincipal %></p>
+                </div>
+
+                <div>
+                    <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 6px;">Visión</div>
+                    <p style="margin: 0; line-height: 1.6;"><%= propuesta.Vision %></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentos -->
+        <div class="pb-card pb-card-padded" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+                <h3 style="margin: 0;">Documentos adjuntos</h3>
+                <span style="font-size: 13px; color: var(--neutral-500);"><%= documentos.length %> de 3 archivos</span>
+            </div>
+
+            <% if (typeof errorArchivo !== 'undefined' && errorArchivo) { %>
+                <div class="pb-alert pb-alert-danger" style="margin-bottom: 12px;">
+                    <span>⚠️</span>
+                    <span><%= errorArchivo %></span>
+                </div>
+            <% } %>
+
+            <% if (documentos.length === 0) { %>
+                <div style="text-align: center; padding: 20px; color: var(--neutral-500); background: var(--neutral-100); border-radius: var(--radius-sm); margin-bottom: 12px;">
+                    <p style="margin: 0;">No hay documentos adjuntos.</p>
+                </div>
+            <% } else { %>
+                <% documentos.forEach(function(doc) { %>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--neutral-100); border-radius: var(--radius-sm); margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 36px; height: 36px; border-radius: 6px; background: var(--brand-primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; text-transform: uppercase;"><%= doc.TipoArchivo %></div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 500;"><%= doc.NombreOriginal %></div>
+                                <div style="font-size: 12px; color: var(--neutral-500);"><%= (doc.TamanoBytes / 1024 / 1024).toFixed(2) %> MB</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <a href="/ponente/propuestas/<%= propuesta.IdPropuesta %>/documentos/<%= doc.IdDocumento %>/descargar"
+                               class="pb-btn pb-btn-ghost" style="text-decoration: none; padding: 6px 12px; font-size: 12px;">Descargar</a>
+                            <% if (propuesta.Estado === 'pendiente') { %>
+                                <form action="/ponente/propuestas/<%= propuesta.IdPropuesta %>/documentos/<%= doc.IdDocumento %>/eliminar" method="POST" style="display: inline; margin: 0;"
+                                      onsubmit="return confirm('¿Eliminar este archivo?');">
+                                    <button type="submit" class="pb-btn pb-btn-danger" style="padding: 6px 12px; font-size: 12px;">Eliminar</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+
+            <% if (propuesta.Estado === 'pendiente' && documentos.length < 3) { %>
+                <form action="/ponente/propuestas/<%= propuesta.IdPropuesta %>/documentos" method="POST" enctype="multipart/form-data" style="margin-top: 16px;">
+                    <div style="border: 2px dashed var(--neutral-300); border-radius: var(--radius-md); padding: 18px; text-align: center; background: var(--neutral-50);">
+                        <div style="font-size: 13px; color: var(--neutral-700); font-weight: 500; margin-bottom: 8px;">
+                            Adjuntar nuevo documento (<%= 3 - documentos.length %> espacios disponibles)
+                        </div>
+                        <div style="font-size: 11px; color: var(--neutral-500); margin-bottom: 12px;">
+                            PDF, PPT, PPTX, DOC, DOCX · Máximo 20 MB por archivo
+                        </div>
+                        <input type="file" name="documento" required accept=".pdf,.ppt,.pptx,.doc,.docx"
+                               style="width: 100%; padding: 8px; border: 1px solid var(--neutral-300); border-radius: var(--radius-sm); background: #fff;">
+                        <button type="submit" class="pb-btn pb-btn-primary" style="margin-top: 10px;">Subir archivo</button>
+                    </div>
+                </form>
+            <% } else if (propuesta.Estado === 'pendiente' && documentos.length >= 3) { %>
+                <div class="pb-alert pb-alert-info" style="margin: 12px 0 0;">
+                    <span>ℹ️</span>
+                    <span>Ya alcanzaste el máximo de 3 archivos. Elimina alguno antes de subir otro.</span>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Acciones -->
+        <div style="display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap;">
+            <a href="/ponente/dashboard" class="pb-btn pb-btn-ghost" style="text-decoration: none;">Volver</a>
+            <% if (propuesta.Estado === 'pendiente') { %>
+                <a href="/ponente/propuestas/<%= propuesta.IdPropuesta %>/editar" class="pb-btn pb-btn-primary" style="text-decoration: none;">Editar propuesta</a>
+                <form action="/ponente/propuestas/<%= propuesta.IdPropuesta %>/cancelar" method="POST" style="display: inline; margin: 0;" onsubmit="return confirm('¿Seguro que quieres cancelar esta propuesta? No podrá deshacerse.');">
+                    <button type="submit" class="pb-btn pb-btn-danger">Cancelar propuesta</button>
+                </form>
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>

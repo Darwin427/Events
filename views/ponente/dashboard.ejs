@@ -1,219 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
-    <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f2f5; 
-            margin: 0; 
-            padding: 20px; 
-            color: #333; 
-            display:flex; 
-            flex-direction:column; 
-            align-items:center; 
-            min-height:100vh;
-        }
-        .main-container { 
-            background-color:#fff; 
-            border-radius:12px; 
-            box-shadow:0 6px 20px rgba(0,0,0,0.1); 
-            width:100%; 
-            max-width:900px; 
-            padding:30px; 
-            margin-bottom:30px;
-        }
-        h1 { 
-            color:#007bff; 
-            text-align:center; 
-            margin-bottom:30px; 
-            font-size:2.5em;
-        }
-        h2 { 
-            color:#333; 
-            border-bottom:1px solid #eee; 
-            padding-bottom:10px; 
-            margin-top:40px; 
-            margin-bottom:25px; 
-            font-size:1.8em;
-        }
-        .form-group { 
-            margin-bottom:18px;
-        }
-        .form-group label { 
-            display:block; 
-            margin-bottom:8px; 
-            font-weight:600; 
-            color:#555; 
-            font-size:1em;
-        }
-        .form-group input[type="text"], 
-        .form-group input[type="number"], 
-        .form-group input[type="date"], 
-        .form-group textarea { 
-            width:100%; 
-            padding:12px; 
-            border:1px solid #ccc; 
-            border-radius:8px; 
-            font-size:1em; 
-            box-sizing:border-box;
-        }
-        .form-group textarea { 
-            resize:vertical; 
-            min-height:80px;
-        }
-        .submit-btn { 
-            background-color:#007bff; 
-            color:white; 
-            border:none; 
-            padding:12px 25px; 
-            border-radius:8px; 
-            cursor:pointer; 
-            font-size:1.1em; 
-            font-weight:500; 
-            width:100%; 
-            margin-top:25px;
-        }
-        .submit-btn:hover { 
-            background-color:#0056b3;
-        }
-        .submitted-event-card { 
-            background-color:#e9f7ef; 
-            border:1px solid #28a745; 
-            border-radius:10px; 
-            padding:20px; 
-            margin-bottom:15px; 
-            display:flex; 
-            flex-direction:column; 
-            gap:8px; 
-            box-shadow:0 2px 8px rgba(0,0,0,0.08);
-        }
-        .submitted-event-card h4 { 
-            margin:0; 
-            color:#155724; 
-            font-size:1.4em;
-        }
-        .submitted-event-card p { 
-            margin:0; 
-            color:#444; 
-            font-size:1em;
-        }
-        .submitted-event-card .status { 
-            font-weight:700; 
-            color:#007bff; 
-            text-decoration:underline; 
-            margin-top:10px;
-        }
-        .submitted-event-card .document-link { 
-            color:#007bff; 
-            text-decoration:none; 
-            font-weight:500;
-        }
-        .submitted-event-card .document-link:hover { 
-            color:#0056b3; 
-            text-decoration:underline;
-        }
-        .no-submitted-events { 
-            text-align:center; 
-            color:#777; 
-            padding:20px; 
-            font-size:1.1em;
-        }
-    </style>
+    <%- include('../partials/head') %>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/ponente/dashboard">
-                        <span class="initial">P</span>
-                        <span class="full-text">Panel Principal</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="initial">S</span>
-                        <span class="full-text">Salir</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+    <%- include('../partials/ponente-header', { session: session, headerSubtitle: 'Mis propuestas' }) %>
 
-    <div class="main-container">
-        <h1>Envío de Propuestas de Eventos</h1>
-
-        <% if (mensaje) { %>
-            <div class="message <%= mensajeTipo %>"><%= mensaje %></div>
-        <% } %>
-
-        <div class="event-form-card">
-            <h3>Enviar Propuesta de Evento</h3>
-
-            <form action="/ponente/enviar-propuesta" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Nombre de la Empresa:</label>
-                    <input type="text" name="companyName" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Tema:</label>
-                    <input type="text" name="topic" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Idea Principal:</label>
-                    <textarea name="idea" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Visión del Evento:</label>
-                    <textarea name="vision" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Documento de la Exposición (PDF/PPT):</label>
-                    <input type="file" name="documento" accept=".pdf,.ppt,.pptx" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Alcance Esperado:</label>
-                    <input type="number" name="expectedReach" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Fecha Tentativa:</label>
-                    <input type="date" name="tentativeDate" required>
-                </div>
-
-                <button type="submit" class="submit-btn">Enviar Propuesta</button>
-            </form>
+    <main class="pb-main">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <h1 style="margin: 0;">Mis propuestas</h1>
+                <p style="color: var(--neutral-500); margin: 4px 0 0;">
+                    <%= propuestas.length %> <%= propuestas.length === 1 ? 'propuesta' : 'propuestas' %> en total
+                </p>
+            </div>
+            <a href="/ponente/propuestas/nueva" class="pb-btn pb-btn-accent" style="text-decoration: none;">+ Nueva propuesta</a>
         </div>
 
-        <h2>Propuestas Enviadas</h2>
+        <% if (propuestas.length === 0) { %>
+            <div class="pb-card pb-card-padded" style="text-align: center; padding: 56px 32px;">
+                <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--brand-accent-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1B2A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <path d="M14 2v6h6M12 18v-6M9 15h6"/>
+                    </svg>
+                </div>
+                <h3 style="margin: 0 0 8px;">Aún no tienes propuestas</h3>
+                <p style="color: var(--neutral-500); max-width: 460px; margin: 0 auto 24px;">
+                    Crea tu primera propuesta para empezar a participar en los eventos de la institución.
+                </p>
+                <a href="/ponente/propuestas/nueva" class="pb-btn pb-btn-accent" style="text-decoration: none;">+ Crear primera propuesta</a>
+            </div>
+        <% } else { %>
+            <% propuestas.forEach(function(p) { %>
+                <% const stateClass = 'pb-card-status-' + (p.Estado === 'pendiente' ? 'pending' : p.Estado === 'aprobada' ? 'approved' : p.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+                <% const pillClass = 'pb-pill-' + (p.Estado === 'pendiente' ? 'pending' : p.Estado === 'aprobada' ? 'approved' : p.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+                <div class="pb-card <%= stateClass %>" style="margin-bottom: 16px;">
+                    <div style="padding: 18px 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; gap: 12px; flex-wrap: wrap;">
+                            <div>
+                                <div style="font-size: 17px; font-weight: 600; color: var(--brand-primary); margin-bottom: 2px;"><%= p.Tema %></div>
+                                <div style="font-size: 13px; color: var(--neutral-500);">
+                                    <%= p.NombreEmpresa ? p.NombreEmpresa : 'Universidad Pascual Bravo (interno)' %>
+                                </div>
+                            </div>
+                            <span class="pb-pill <%= pillClass %>"><%= p.Estado %></span>
+                        </div>
 
-        <% if (propuestas && propuestas.length > 0) { %>
-            <% propuestas.forEach(function(propuesta) { %>
-                <div class="submitted-event-card">
-                    <h4><%= propuesta.Tema %></h4>
-                    <p><strong>Empresa:</strong> <%= propuesta.NombreEmpresa %></p>
-                    <p><strong>Idea Principal:</strong> <%= propuesta.IdeaPrincipal %></p>
-                    <p><strong>Visión:</strong> <%= propuesta.Vision %></p>
-                    <p><strong>Alcance Esperado:</strong> <%= propuesta.AlcanceEsperado %></p>
-                    <p><strong>Fecha Tentativa:</strong> <%= new Date(propuesta.FechaTentativa).toLocaleDateString() %></p>
-                    <% if (propuesta.Documento) { %>
-                        <p><a href="/uploads/<%= propuesta.Documento %>" class="document-link" target="_blank">Ver Documento</a></p>
-                    <% } %>
-                    <div class="status">Estado: <%= propuesta.Estado || 'Pendiente' %></div>
+                        <% if (p.Estado === 'aprobada' && p.FechaDefinitiva) { %>
+                            <div style="background: var(--neutral-100); border-radius: var(--radius-md); padding: 14px 16px; margin-top: 4px;">
+                                <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-700); font-weight: 600; margin-bottom: 8px;">Detalles del evento</div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; font-size: 13px;">
+                                    <div><span style="color: var(--neutral-500);">Fecha:</span> <strong><%= formatDate(p.FechaDefinitiva) %></strong></div>
+                                    <div><span style="color: var(--neutral-500);">Hora:</span> <strong><%= p.HoraInicio %> — <%= p.HoraFin %></strong></div>
+                                    <div><span style="color: var(--neutral-500);">Lugar:</span> <strong><%= p.Lugar %></strong></div>
+                                    <div><span style="color: var(--neutral-500);">Cupo:</span> <strong><%= p.CupoMaximo %> personas</strong></div>
+                                </div>
+                            </div>
+                        <% } else if (p.Estado === 'rechazada' && p.MotivoRechazo) { %>
+                            <div class="pb-alert pb-alert-danger" style="margin-top: 4px; margin-bottom: 0;">
+                                <span><strong>Motivo:</strong> <%= p.MotivoRechazo %></span>
+                            </div>
+                        <% } else { %>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 24px; padding: 12px 0; border-top: 1px solid var(--neutral-200); font-size: 13px;">
+                                <div><span style="color: var(--neutral-500);">Fecha tentativa:</span> <strong><%= formatDate(p.FechaTentativa) %></strong></div>
+                                <div><span style="color: var(--neutral-500);">Alcance:</span> <strong><%= p.AlcanceEsperado %> personas</strong></div>
+                                <div><span style="color: var(--neutral-500);">Documentos:</span> <strong><%= p.NumDocumentos %> de 3</strong></div>
+                                <div><span style="color: var(--neutral-500);">Enviada:</span> <strong><%= formatDate(p.FechaEnvio) %></strong></div>
+                            </div>
+                        <% } %>
+
+                        <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+                            <a href="/ponente/propuestas/<%= p.IdPropuesta %>" class="pb-btn pb-btn-ghost" style="text-decoration: none;">Ver detalle</a>
+                            <% if (p.Estado === 'pendiente') { %>
+                                <a href="/ponente/propuestas/<%= p.IdPropuesta %>/editar" class="pb-btn pb-btn-ghost" style="text-decoration: none;">Editar</a>
+                                <form action="/ponente/propuestas/<%= p.IdPropuesta %>/cancelar" method="POST" style="display: inline; margin: 0;" onsubmit="return confirm('¿Seguro que quieres cancelar esta propuesta? No podrá deshacerse.');">
+                                    <button type="submit" class="pb-btn pb-btn-danger">Cancelar</button>
+                                </form>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
             <% }); %>
-        <% } else { %>
-            <div class="no-submitted-events">No has enviado propuestas aún.</div>
         <% } %>
-    </div>
+    </main>
 </body>
 </html>

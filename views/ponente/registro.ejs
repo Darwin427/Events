@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <div class="pb-login-bg" style="background: linear-gradient(135deg, rgba(27, 42, 78, 0.92), rgba(36, 55, 96, 0.94));">
+        <div class="pb-login-card" style="max-width: 480px;">
+            <div class="pb-header">
+                <div class="pb-header-brand">
+                    <div class="pb-logo-mark">PB</div>
+                    <div>
+                        <div class="pb-logo-text">INSTITUCIÓN UNIVERSITARIA</div>
+                        <div class="pb-logo-name">PASCUAL BRAVO</div>
+                    </div>
+                </div>
+            </div>
+            <div class="pb-strip"></div>
+
+            <div class="pb-login-body">
+                <h2 class="pb-login-title">Solicitar cuenta de ponente</h2>
+                <p class="pb-login-sub">Completa el formulario. Cuando un administrador apruebe tu solicitud, podrás iniciar sesión.</p>
+
+                <% if (error) { %>
+                    <div class="pb-alert pb-alert-danger">
+                        <span>⚠️</span>
+                        <span><%= error %></span>
+                    </div>
+                <% } %>
+
+                <% if (success) { %>
+                    <div class="pb-alert" style="background: var(--state-success-soft); color: #1B5E20; border-left: 3px solid var(--state-success);">
+                        <span>✓</span>
+                        <span><%= success %></span>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="/ponente/login" class="pb-btn pb-btn-primary" style="text-decoration: none;">Ir al login</a>
+                    </div>
+                <% } else { %>
+                    <form action="/ponente/registro" method="POST" novalidate>
+                        <div class="pb-field">
+                            <label for="nombre" class="pb-label">Nombre completo *</label>
+                            <input type="text" id="nombre" name="nombre" class="pb-input" required
+                                   value="<%= form.nombre || '' %>" placeholder="Tu nombre y apellido" maxlength="100">
+                        </div>
+
+                        <div class="pb-field">
+                            <label for="email" class="pb-label">Correo *</label>
+                            <input type="email" id="email" name="email" class="pb-input" required
+                                   value="<%= form.email || '' %>" placeholder="tu.correo@empresa.com" maxlength="150">
+                        </div>
+
+                        <div style="background: var(--neutral-100); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 16px;">
+                            <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+                                <input type="checkbox" name="esInterno" id="esInterno"
+                                       <%= form.esInterno ? 'checked' : '' %>
+                                       style="margin-top: 2px;"
+                                       onchange="document.getElementById('empresaField').style.display = this.checked ? 'none' : 'block';">
+                                <div>
+                                    <div style="font-size: 14px; color: var(--neutral-900); font-weight: 500;">Soy parte de la universidad</div>
+                                    <div style="font-size: 12px; color: var(--neutral-500);">Si activas, no necesitas indicar empresa externa.</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="empresaField" class="pb-field" style="display: <%= form.esInterno ? 'none' : 'block' %>;">
+                            <label for="nombreEmpresa" class="pb-label">Empresa o entidad</label>
+                            <input type="text" id="nombreEmpresa" name="nombreEmpresa" class="pb-input"
+                                   value="<%= form.nombreEmpresa || '' %>" placeholder="Ej. Tech Solutions S.A." maxlength="150">
+                        </div>
+
+                        <div class="pb-field">
+                            <label for="password" class="pb-label">Contraseña * (mínimo 8 caracteres)</label>
+                            <input type="password" id="password" name="password" class="pb-input" required minlength="8" placeholder="••••••••">
+                        </div>
+
+                        <div class="pb-field">
+                            <label for="passwordConfirm" class="pb-label">Confirmar contraseña *</label>
+                            <input type="password" id="passwordConfirm" name="passwordConfirm" class="pb-input" required minlength="8" placeholder="••••••••">
+                        </div>
+
+                        <button type="submit" class="pb-btn pb-btn-primary pb-btn-full">
+                            Enviar solicitud
+                        </button>
+                    </form>
+                <% } %>
+
+                <div class="pb-login-footer">
+                    ¿Ya tienes cuenta? <a href="/ponente/login">Iniciar sesión</a>
+                    <br>
+                    <a href="/inicio" style="font-size: 12px;">← Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

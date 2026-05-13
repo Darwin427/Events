@@ -1,0 +1,2 @@
+# Este archivo conserva la carpeta uploads/ en el repo
+# Los archivos reales subidos por usuarios se ignoran via .gitignore

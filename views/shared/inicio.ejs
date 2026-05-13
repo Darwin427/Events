@@ -1,48 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
+    <%- include('../partials/head') %>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/administrador">
-                        <span class="initial">A</span>
-                        <span class="full-text">Soy Administrador</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/asistente">
-                        <span class="initial">AS</span>
-                        <span class="full-text">Soy Asistente</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/ponente">
-                        <span class="initial">P</span>
-                        <span class="full-text">Soy Ponente</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-
-    <div class="main-container">
-        <header>
-            <h1>Página de eventos de la Institución Universitaria Pascual Bravo</h1>
-            <h2>Siempre mejorando tu experiencia</h2>
-        </header>
-
-        <section class="content">
-            <p>En este espacio encontrarás toda la información sobre las actividades académicas, culturales, deportivas y sociales que se desarrollan en nuestra universidad.</p>
-            <p>Nuestro objetivo es mantenerte informado y conectado con la vida universitaria, fomentando la participación, el aprendizaje y la integración de toda la comunidad educativa.</p>
-            <p>¡Explora, participa y sé parte de cada experiencia que hace grande a nuestra universidad!</p>
-        </section>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">INSTITUCIÓN UNIVERSITARIA</div>
+                <div class="pb-logo-name">PASCUAL BRAVO</div>
+            </div>
+        </div>
     </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main" style="max-width: 1000px;">
+        <section style="text-align: center; margin: 40px 0 48px;">
+            <h1 style="font-size: 32px; margin: 0 0 12px;">Sistema de Eventos</h1>
+            <p style="font-size: 16px; color: var(--neutral-700); max-width: 680px; margin: 0 auto; line-height: 1.6;">
+                Plataforma oficial para la gestión de eventos académicos, culturales, deportivos y sociales
+                de la Institución Universitaria Pascual Bravo.
+            </p>
+        </section>
+
+        <section>
+            <h2 style="text-align: center; margin: 0 0 20px;">¿Cómo quieres ingresar?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+
+                <a href="/admin/login" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; color: var(--brand-accent); font-size: 22px; font-weight: 700;">A</div>
+                    <h3 style="margin: 0 0 6px;">Administrador</h3>
+                    <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Gestiona ponentes, propuestas, eventos y aprobaciones del sistema.</p>
+                </a>
+
+                <a href="/ponente/login" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-accent); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; color: var(--brand-primary); font-size: 22px; font-weight: 700;">P</div>
+                    <h3 style="margin: 0 0 6px;">Ponente</h3>
+                    <p style="font-size: 13px; color: var(--neutral-500); margin: 0 0 8px;">Propone eventos, sube documentos y gestiona tus propuestas.</p>
+                    <div style="font-size: 12px;">
+                        <a href="/ponente/registro" onclick="event.stopPropagation();">¿Sin cuenta? Solicítala aquí</a>
+                    </div>
+                </a>
+
+                <a href="/asistente/login" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; text-align: center; display: block;">
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-secondary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; color: #fff; font-size: 18px; font-weight: 700;">AS</div>
+                    <h3 style="margin: 0 0 6px;">Asistente</h3>
+                    <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Inscríbete a eventos disponibles y consulta tu calendario.</p>
+                </a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

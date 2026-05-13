@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ADMIN</div>
+                <div class="pb-logo-name">Gestión de ponentes</div>
+            </div>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Administrador' %></span>
+                <a href="/admin/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main">
+        <div style="margin-bottom: 28px;">
+            <a href="/admin/dashboard" style="font-size: 13px;">← Volver al dashboard</a>
+            <h1 style="margin: 12px 0 6px;">Gestión de ponentes</h1>
+            <p style="color: var(--neutral-500); margin: 0;">Aprueba o rechaza solicitudes de cuenta, y gestiona ponentes existentes.</p>
+        </div>
+
+        <!-- Solicitudes pendientes -->
+        <section style="margin-bottom: 36px;">
+            <h2 style="margin: 0 0 12px;">
+                Solicitudes pendientes
+                <span class="pb-pill pb-pill-pending" style="vertical-align: middle; margin-left: 6px;"><%= pendientes.length %></span>
+            </h2>
+
+            <% if (pendientes.length === 0) { %>
+                <div class="pb-card pb-card-padded" style="text-align: center; color: var(--neutral-500);">
+                    No hay solicitudes pendientes en este momento.
+                </div>
+            <% } else { %>
+                <% pendientes.forEach(function(p) { %>
+                    <div class="pb-card pb-card-status-pending" style="margin-bottom: 12px;">
+                        <div style="padding: 16px 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                                <div>
+                                    <div style="font-size: 16px; font-weight: 600; color: var(--brand-primary);"><%= p.Nombre %></div>
+                                    <div style="font-size: 13px; color: var(--neutral-500);"><%= p.Correo %></div>
+                                    <div style="font-size: 12px; color: var(--neutral-500); margin-top: 4px;">Solicitada: <%= new Date(p.FechaRegistro).toLocaleString('es-CO') %></div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <form action="/admin/solicitudes/<%= p.IdUsuario %>/aprobar" method="POST" style="margin: 0;">
+                                        <button type="submit" class="pb-btn pb-btn-accent">Aprobar</button>
+                                    </form>
+                                    <form action="/admin/solicitudes/<%= p.IdUsuario %>/rechazar" method="POST" style="margin: 0;"
+                                          onsubmit="return confirm('¿Rechazar esta solicitud? El registro se eliminará.');">
+                                        <button type="submit" class="pb-btn pb-btn-danger">Rechazar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </section>
+
+        <!-- Ponentes aprobados -->
+        <section>
+            <h2 style="margin: 0 0 12px;">
+                Ponentes activos
+                <span class="pb-pill pb-pill-approved" style="vertical-align: middle; margin-left: 6px;"><%= aprobados.filter(a => a.Activo === 1).length %></span>
+            </h2>
+
+            <% if (aprobados.length === 0) { %>
+                <div class="pb-card pb-card-padded" style="text-align: center; color: var(--neutral-500);">
+                    Aún no hay ponentes aprobados.
+                </div>
+            <% } else { %>
+                <% aprobados.forEach(function(p) { %>
+                    <div class="pb-card <%= p.Activo === 1 ? 'pb-card-status-approved' : 'pb-card-status-cancelled' %>" style="margin-bottom: 12px;">
+                        <div style="padding: 16px 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                                <div>
+                                    <div style="font-size: 16px; font-weight: 600; color: var(--brand-primary);">
+                                        <%= p.Nombre %>
+                                        <% if (p.Activo === 0) { %>
+                                            <span class="pb-pill pb-pill-cancelled" style="margin-left: 8px;">Desactivado</span>
+                                        <% } %>
+                                    </div>
+                                    <div style="font-size: 13px; color: var(--neutral-500);"><%= p.Correo %></div>
+                                </div>
+                                <% if (p.Activo === 1) { %>
+                                    <form action="/admin/ponentes/<%= p.IdUsuario %>/desactivar" method="POST" style="margin: 0;"
+                                          onsubmit="return confirm('¿Desactivar este ponente? Sus propuestas pendientes y eventos aprobados se cancelarán automáticamente.');">
+                                        <button type="submit" class="pb-btn pb-btn-danger">Desactivar</button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </section>
+    </main>
+</body>
+</html>

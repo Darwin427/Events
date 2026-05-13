@@ -1,48 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
+    <%- include('../partials/head') %>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/admin/calendar">
-                        <span class="initial">C</span>
-                        <span class="full-text">Calendario</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/ponencias">
-                        <span class="initial">P</span>
-                        <span class="full-text">Ponencias</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="initial">S</span>
-                        <span class="full-text">Salir</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    
-    <div class="main-container">
-        <header>
-            <h1>Página de eventos de la Institución Universitaria Pascual Bravo</h1>
-            <h2>Siempre mejorando tu experiencia</h2>
-        </header>
-
-        <section class="content">
-            <p>Bienvenido administrador a tu página principal, en la barra lateral encontraras las siguientes opciones:</p>
-            <p>1. Calendario: podrás ver los días libres para asignar eventos y tener conocimiento de tu calendario siguiente</p>
-            <p>2. Página de ponencias: Acá podrás aprobar o negar solicitudes de ponencias enviado por los expositores, en esta deberás asignar características a la ponencia</p>
-        </section>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ADMIN</div>
+                <div class="pb-logo-name">Panel principal</div>
+            </div>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Administrador' %></span>
+                <a href="/admin/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
     </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main">
+        <div style="margin-bottom: 28px;">
+            <h1 style="margin: 0;">Hola, <%= session.userName || 'Administrador' %></h1>
+            <p style="color: var(--neutral-500); margin: 6px 0 0;">Panel de administración del sistema Events.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+
+            <a href="/admin/solicitudes" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; transition: transform .12s, box-shadow .15s; display: block;">
+                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-warning-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                </div>
+                <h3 style="margin: 0 0 6px;">Gestión de ponentes</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Aprueba solicitudes de cuenta, gestiona ponentes activos.</p>
+            </a>
+
+            <a href="/admin/ponencias" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; transition: transform .12s, box-shadow .15s; display: block;">
+                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--brand-secondary-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E88E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <h3 style="margin: 0 0 6px;">Propuestas de eventos</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Revisa, aprueba o rechaza las propuestas enviadas por los ponentes.</p>
+            </a>
+
+            <a href="/admin/calendar" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; transition: transform .12s, box-shadow .15s; display: block;">
+                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-success-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <h3 style="margin: 0 0 6px;">Calendario</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Visualiza los eventos programados y disponibilidad de salas.</p>
+            </a>
+        </div>
+    </main>
 </body>
 </html>

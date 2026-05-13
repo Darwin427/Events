@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ADMIN</div>
+                <div class="pb-logo-name">Revisar propuesta</div>
+            </div>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Administrador' %></span>
+                <a href="/admin/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main" style="max-width: 880px;">
+        <div style="margin-bottom: 20px;">
+            <a href="/admin/propuestas?estado=<%= propuesta.Estado %>" style="font-size: 13px;">← Volver a propuestas</a>
+        </div>
+
+        <% if (error) { %>
+            <div class="pb-alert pb-alert-danger">
+                <span>⚠️</span>
+                <span><%= error %></span>
+            </div>
+        <% } %>
+
+        <% const stateClass = 'pb-card-status-' + (propuesta.Estado === 'pendiente' ? 'pending' : propuesta.Estado === 'aprobada' ? 'approved' : propuesta.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+        <% const pillClass = 'pb-pill-' + (propuesta.Estado === 'pendiente' ? 'pending' : propuesta.Estado === 'aprobada' ? 'approved' : propuesta.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+
+        <!-- Información de la propuesta -->
+        <div class="pb-card <%= stateClass %>" style="margin-bottom: 16px;">
+            <div style="padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+                    <h1 style="margin: 0; font-size: 24px;"><%= propuesta.Tema %></h1>
+                    <span class="pb-pill <%= pillClass %>"><%= propuesta.Estado %></span>
+                </div>
+
+                <div style="background: var(--neutral-100); border-radius: var(--radius-md); padding: 12px 16px; margin: 16px 0;">
+                    <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-700); font-weight: 600; margin-bottom: 6px;">Ponente</div>
+                    <div style="font-size: 15px; font-weight: 500;"><%= propuesta.PonenteNombre %></div>
+                    <div style="font-size: 13px; color: var(--neutral-500);">
+                        <%= propuesta.PonenteCorreo %> ·
+                        <%= propuesta.NombreEmpresa ? propuesta.NombreEmpresa : 'Universidad Pascual Bravo (interno)' %>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 28px; margin-bottom: 24px;">
+                    <div>
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 4px;">Alcance esperado</div>
+                        <div style="font-size: 15px; font-weight: 500;"><%= propuesta.AlcanceEsperado %> personas</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 4px;">Fecha tentativa</div>
+                        <div style="font-size: 15px; font-weight: 500;"><%= formatDate(propuesta.FechaTentativa) %></div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 4px;">Enviada</div>
+                        <div style="font-size: 15px; font-weight: 500;"><%= formatDate(propuesta.FechaEnvio) %></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 6px;">Idea principal</div>
+                    <p style="margin: 0; line-height: 1.6;"><%= propuesta.IdeaPrincipal %></p>
+                </div>
+
+                <div>
+                    <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 6px;">Visión</div>
+                    <p style="margin: 0; line-height: 1.6;"><%= propuesta.Vision %></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentos -->
+        <div class="pb-card pb-card-padded" style="margin-bottom: 16px;">
+            <h3 style="margin: 0 0 14px;">Documentos adjuntos <span style="font-weight: 400; color: var(--neutral-500); font-size: 14px;">(<%= documentos.length %>)</span></h3>
+            <% if (documentos.length === 0) { %>
+                <div style="text-align: center; padding: 16px; color: var(--neutral-500); background: var(--neutral-100); border-radius: var(--radius-sm);">
+                    El ponente no adjuntó documentos.
+                </div>
+            <% } else { %>
+                <% documentos.forEach(function(doc) { %>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--neutral-100); border-radius: var(--radius-sm); margin-bottom: 6px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 36px; height: 36px; border-radius: 6px; background: var(--brand-primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; text-transform: uppercase;"><%= doc.TipoArchivo %></div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 500;"><%= doc.NombreOriginal %></div>
+                                <div style="font-size: 12px; color: var(--neutral-500);"><%= (doc.TamanoBytes / 1024 / 1024).toFixed(2) %> MB</div>
+                            </div>
+                        </div>
+                        <a href="/admin/propuestas/<%= propuesta.IdPropuesta %>/documentos/<%= doc.IdDocumento %>" target="_blank"
+                           class="pb-btn pb-btn-ghost" style="text-decoration: none; padding: 6px 12px; font-size: 12px;">Ver</a>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+
+        <!-- Si ya está aprobada: mostrar detalles del evento -->
+        <% if (propuesta.Estado === 'aprobada' && propuesta.FechaDefinitiva) { %>
+            <div class="pb-card pb-card-padded" style="margin-bottom: 16px; background: var(--state-success-soft);">
+                <h3 style="margin: 0 0 12px; color: #1B5E20;">✓ Detalles del evento aprobado</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; font-size: 14px; color: #1B5E20;">
+                    <div><strong>Fecha:</strong> <%= formatDate(propuesta.FechaDefinitiva) %></div>
+                    <div><strong>Hora:</strong> <%= propuesta.HoraInicio %> — <%= propuesta.HoraFin %></div>
+                    <div><strong>Lugar:</strong> <%= propuesta.Lugar %></div>
+                    <div><strong>Cupo máximo:</strong> <%= propuesta.CupoMaximo %> personas</div>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Si está rechazada: mostrar motivo -->
+        <% if (propuesta.Estado === 'rechazada' && propuesta.MotivoRechazo) { %>
+            <div class="pb-card pb-card-padded" style="margin-bottom: 16px;">
+                <h3 style="margin: 0 0 8px; color: var(--state-danger);">Motivo del rechazo</h3>
+                <p style="margin: 0; line-height: 1.6;"><%= propuesta.MotivoRechazo %></p>
+            </div>
+        <% } %>
+
+        <!-- Si está pendiente: formularios de aprobar/rechazar -->
+        <% if (propuesta.Estado === 'pendiente') { %>
+            <!-- APROBAR -->
+            <div class="pb-card pb-card-padded" style="margin-bottom: 16px;">
+                <h3 style="margin: 0 0 6px;">Aprobar propuesta</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0 0 16px;">
+                    Define la fecha definitiva, hora, lugar y cupo máximo. Al aprobar se creará el evento asociado.
+                </p>
+
+                <form action="/admin/propuestas/<%= propuesta.IdPropuesta %>/aprobar" method="POST" novalidate>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="pb-field">
+                            <label for="fechaDefinitiva" class="pb-label">Fecha definitiva *</label>
+                            <input type="date" id="fechaDefinitiva" name="fechaDefinitiva" class="pb-input" required
+                                   value="<%= propuesta.fechaDefinitiva || propuesta.FechaTentativa ? new Date(propuesta.fechaDefinitiva || propuesta.FechaTentativa).toISOString().split('T')[0] : '' %>">
+                        </div>
+                        <div class="pb-field">
+                            <label for="cupoMaximo" class="pb-label">Cupo máximo *</label>
+                            <input type="number" id="cupoMaximo" name="cupoMaximo" class="pb-input" required min="1"
+                                   value="<%= propuesta.cupoMaximo || propuesta.AlcanceEsperado %>">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="pb-field">
+                            <label for="horaInicio" class="pb-label">Hora de inicio *</label>
+                            <input type="time" id="horaInicio" name="horaInicio" class="pb-input" required
+                                   value="<%= propuesta.horaInicio || '09:00' %>">
+                        </div>
+                        <div class="pb-field">
+                            <label for="horaFin" class="pb-label">Hora de fin *</label>
+                            <input type="time" id="horaFin" name="horaFin" class="pb-input" required
+                                   value="<%= propuesta.horaFin || '11:00' %>">
+                        </div>
+                    </div>
+
+                    <div class="pb-field">
+                        <label for="lugar" class="pb-label">Lugar *</label>
+                        <input type="text" id="lugar" name="lugar" class="pb-input" required maxlength="200"
+                               value="<%= propuesta.lugar || '' %>"
+                               placeholder="Ej. Auditorio Principal, Salón A-301...">
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                        <button type="submit" class="pb-btn pb-btn-accent">✓ Aprobar y crear evento</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RECHAZAR -->
+            <div class="pb-card pb-card-padded" style="margin-bottom: 16px; border-top: 4px solid var(--state-danger);">
+                <h3 style="margin: 0 0 6px; color: var(--state-danger);">Rechazar propuesta</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0 0 16px;">
+                    Indica el motivo. El ponente lo verá en su dashboard.
+                </p>
+
+                <form action="/admin/propuestas/<%= propuesta.IdPropuesta %>/rechazar" method="POST" novalidate
+                      onsubmit="return confirm('¿Confirmas el rechazo de esta propuesta?');">
+                    <div class="pb-field">
+                        <label for="motivoRechazo" class="pb-label">Motivo del rechazo *</label>
+                        <textarea id="motivoRechazo" name="motivoRechazo" class="pb-input" rows="3" required
+                                  placeholder="Ej. El tema se solapa con un evento ya programado. Sugerimos reformular..."></textarea>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="submit" class="pb-btn pb-btn-danger">Rechazar propuesta</button>
+                    </div>
+                </form>
+            </div>
+        <% } %>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+            <a href="/admin/propuestas" class="pb-btn pb-btn-ghost" style="text-decoration: none;">Volver al listado</a>
+        </div>
+    </main>
+</body>
+</html>

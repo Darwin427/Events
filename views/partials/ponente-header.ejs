@@ -1,0 +1,17 @@
+<div class="pb-header">
+    <div class="pb-header-brand">
+        <div class="pb-logo-mark">PB</div>
+        <div>
+            <div class="pb-logo-text">PORTAL PONENTE</div>
+            <div class="pb-logo-name"><%= typeof headerSubtitle !== 'undefined' ? headerSubtitle : 'Mis propuestas' %></div>
+        </div>
+    </div>
+    <div class="pb-user">
+        <div class="pb-avatar"><%= (session.userName || 'P').charAt(0).toUpperCase() %></div>
+        <div class="pb-user-info">
+            <span class="pb-user-name"><%= session.userName || 'Ponente' %></span>
+            <a href="/ponente/logout" class="pb-user-link">Cerrar sesión</a>
+        </div>
+    </div>
+</div>
+<div class="pb-strip"></div>

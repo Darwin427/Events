@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ADMIN</div>
+                <div class="pb-logo-name">Propuestas</div>
+            </div>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Administrador' %></span>
+                <a href="/admin/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main">
+        <div style="margin-bottom: 24px;">
+            <a href="/admin/dashboard" style="font-size: 13px;">← Volver al dashboard</a>
+            <h1 style="margin: 12px 0 6px;">Propuestas de eventos</h1>
+            <p style="color: var(--neutral-500); margin: 0;">Revisa, aprueba o rechaza las propuestas enviadas por los ponentes.</p>
+        </div>
+
+        <!-- Tabs de filtro -->
+        <div style="display: flex; gap: 4px; border-bottom: 1px solid var(--neutral-200); margin-bottom: 20px; flex-wrap: wrap;">
+            <% const tabs = [
+                { value: 'pendiente', label: 'Pendientes', count: conteo.pendiente, color: '#8A4500' },
+                { value: 'aprobada',  label: 'Aprobadas',  count: conteo.aprobada,  color: '#1B5E20' },
+                { value: 'rechazada', label: 'Rechazadas', count: conteo.rechazada, color: '#B71C1C' },
+                { value: 'cancelada', label: 'Canceladas', count: conteo.cancelada, color: '#3E4C59' },
+                { value: 'todas',     label: 'Todas',      count: conteo.total,     color: '#1B2A4E' }
+            ]; %>
+            <% tabs.forEach(function(t) { %>
+                <a href="/admin/propuestas?estado=<%= t.value %>"
+                   style="text-decoration: none; padding: 10px 16px; font-size: 14px; font-weight: 500;
+                          color: <%= filtroEstado === t.value ? t.color : 'var(--neutral-500)' %>;
+                          border-bottom: 2px solid <%= filtroEstado === t.value ? t.color : 'transparent' %>;
+                          margin-bottom: -1px; transition: color .15s;">
+                    <%= t.label %>
+                    <span style="background: var(--neutral-100); padding: 2px 8px; border-radius: 999px; font-size: 12px; margin-left: 4px;"><%= t.count %></span>
+                </a>
+            <% }); %>
+        </div>
+
+        <% if (propuestas.length === 0) { %>
+            <div class="pb-card pb-card-padded" style="text-align: center; padding: 48px 32px; color: var(--neutral-500);">
+                <p style="margin: 0;">No hay propuestas en estado "<%= filtroEstado %>".</p>
+            </div>
+        <% } else { %>
+            <% propuestas.forEach(function(p) { %>
+                <% const stateClass = 'pb-card-status-' + (p.Estado === 'pendiente' ? 'pending' : p.Estado === 'aprobada' ? 'approved' : p.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+                <% const pillClass = 'pb-pill-' + (p.Estado === 'pendiente' ? 'pending' : p.Estado === 'aprobada' ? 'approved' : p.Estado === 'rechazada' ? 'rejected' : 'cancelled'); %>
+                <div class="pb-card <%= stateClass %>" style="margin-bottom: 12px;">
+                    <div style="padding: 18px 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; gap: 12px; flex-wrap: wrap;">
+                            <div>
+                                <div style="font-size: 17px; font-weight: 600; color: var(--brand-primary); margin-bottom: 2px;"><%= p.Tema %></div>
+                                <div style="font-size: 13px; color: var(--neutral-500);">
+                                    Ponente: <strong><%= p.PonenteNombre %></strong> ·
+                                    <%= p.NombreEmpresa ? p.NombreEmpresa : 'Universidad Pascual Bravo (interno)' %>
+                                </div>
+                            </div>
+                            <span class="pb-pill <%= pillClass %>"><%= p.Estado %></span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 24px; padding: 12px 0; border-top: 1px solid var(--neutral-200); font-size: 13px;">
+                            <div><span style="color: var(--neutral-500);">Fecha tentativa:</span> <strong><%= formatDate(p.FechaTentativa) %></strong></div>
+                            <div><span style="color: var(--neutral-500);">Alcance:</span> <strong><%= p.AlcanceEsperado %> personas</strong></div>
+                            <div><span style="color: var(--neutral-500);">Documentos:</span> <strong><%= p.NumDocumentos %></strong></div>
+                            <div><span style="color: var(--neutral-500);">Enviada:</span> <strong><%= formatDate(p.FechaEnvio) %></strong></div>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <a href="/admin/propuestas/<%= p.IdPropuesta %>" class="pb-btn <%= p.Estado === 'pendiente' ? 'pb-btn-accent' : 'pb-btn-ghost' %>" style="text-decoration: none;">
+                                <%= p.Estado === 'pendiente' ? 'Revisar' : 'Ver detalle' %>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+    </main>
+</body>
+</html>
