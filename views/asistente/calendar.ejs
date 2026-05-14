@@ -1,65 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
+    <%- include('../partials/head') %>
+    <style>
+        .cal-section {
+            margin-bottom: 32px;
+        }
+        .cal-section h2 {
+            font-size: 18px;
+            margin: 0 0 12px;
+            color: var(--brand-primary);
+        }
+        .cal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .cal-item {
+            display: grid;
+            grid-template-columns: 84px 1fr auto;
+            gap: 16px;
+            align-items: center;
+            padding: 14px 18px;
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .cal-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        .cal-item.inscrito {
+            border-left: 4px solid var(--state-success);
+            background: var(--state-success-soft);
+        }
+        .cal-date {
+            text-align: center;
+            background: var(--brand-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 8px 4px;
+        }
+        .cal-date-day {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .cal-date-mon {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 2px;
+        }
+        .cal-info-title {
+            font-weight: 600;
+            color: var(--brand-primary);
+            margin-bottom: 4px;
+        }
+        .cal-info-meta {
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+        @media (max-width: 480px) {
+            .cal-item {
+                grid-template-columns: 64px 1fr;
+            }
+            .cal-item > :last-child {
+                grid-column: 1 / -1;
+                margin-top: 4px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/asistente/dashboard">
-                        <span class="initial">P</span>
-                        <span class="full-text">Panel Principal</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/asistente/calendar">
-                        <span class="initial">C</span>
-                        <span class="full-text">Calendario</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/asistente/registro">
-                        <span class="initial">R</span>
-                        <span class="full-text">Registros</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="initial">S</span>
-                        <span class="full-text">Salir</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    
-    <div class="main-container">
-        <header>
-            <h1>Calendario de Eventos</h1>
-            <h2>Próximas Actividades</h2>
-        </header>
+    <%- include('../partials/asistente-header', {
+        session: session,
+        headerSubtitle: 'Calendario',
+        mensaje: typeof mensaje !== 'undefined' ? mensaje : null
+    }) %>
 
-        <section class="content">
-            <p>Bienvenido al calendario de eventos.</p>
-            <p>Aquí podrás:</p>
-            <ul>
-                <li>Ver todos los eventos programados</li>
-                <li>Consultar fechas y horarios de las ponencias</li>
-                <li>Obtener detalles de cada actividad</li>
-                <li>Planificar tu asistencia</li>
-            </ul>
-            
-            <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
-                <h3>Próximos Eventos</h3>
-                <p>Los eventos aprobados y programados aparecerán en este calendario.</p>
-                <p>Podrás filtrar por tipo de evento y fecha.</p>
-            </div>
+    <main class="pb-main">
+        <div style="margin-bottom: 24px;">
+            <h1 style="margin: 0;">Calendario de eventos</h1>
+            <p style="color: var(--neutral-500); margin: 4px 0 0;">
+                Tus inscripciones y los proximos eventos disponibles.
+            </p>
+        </div>
+
+        <!-- Seccion: mis eventos inscritos -->
+        <section class="cal-section">
+            <h2>Mis eventos (<%= misEventos.length %>)</h2>
+
+            <% if (misEventos.length === 0) { %>
+                <div class="pb-card pb-card-padded" style="text-align: center;">
+                    <p style="color: var(--neutral-500); margin: 0;">No tienes inscripciones activas.</p>
+                    <a href="/asistente/eventos" class="pb-btn pb-btn-accent" style="text-decoration: none; margin-top: 12px; display: inline-block;">
+                        Explorar eventos disponibles
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="cal-list">
+                    <% misEventos.forEach(function(e) { %>
+                        <% const d = new Date(e.FechaDefinitiva); %>
+                        <div class="cal-item inscrito">
+                            <div class="cal-date">
+                                <div class="cal-date-day"><%= d.getDate() %></div>
+                                <div class="cal-date-mon"><%= d.toLocaleDateString('es-CO', { month: 'short' }).replace('.', '') %></div>
+                            </div>
+                            <div>
+                                <div class="cal-info-title"><%= e.Tema %></div>
+                                <div class="cal-info-meta">
+                                    🕐 <%= e.HoraInicioFmt %> — <%= e.HoraFinFmt %> &nbsp;·&nbsp; 📍 <%= e.Lugar %>
+                                </div>
+                            </div>
+                            <span class="pb-pill pb-pill-approved">Inscrito</span>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
         </section>
-    </div>
+
+        <!-- Seccion: todos los proximos eventos -->
+        <section class="cal-section">
+            <h2>Proximos eventos en la institucion (<%= todosEventos.length %>)</h2>
+
+            <% if (todosEventos.length === 0) { %>
+                <div class="pb-card pb-card-padded" style="text-align: center;">
+                    <p style="color: var(--neutral-500); margin: 0;">No hay eventos programados por ahora.</p>
+                </div>
+            <% } else { %>
+                <div class="cal-list">
+                    <% todosEventos.forEach(function(e) { %>
+                        <% const d = new Date(e.FechaDefinitiva); %>
+                        <div class="cal-item <%= e.inscrito ? 'inscrito' : '' %>">
+                            <div class="cal-date">
+                                <div class="cal-date-day"><%= d.getDate() %></div>
+                                <div class="cal-date-mon"><%= d.toLocaleDateString('es-CO', { month: 'short' }).replace('.', '') %></div>
+                            </div>
+                            <div>
+                                <div class="cal-info-title"><%= e.Tema %></div>
+                                <div class="cal-info-meta">
+                                    🕐 <%= e.HoraInicioFmt %> — <%= e.HoraFinFmt %> &nbsp;·&nbsp; 📍 <%= e.Lugar %>
+                                </div>
+                            </div>
+                            <% if (e.inscrito) { %>
+                                <span class="pb-pill pb-pill-approved">Inscrito</span>
+                            <% } else { %>
+                                <a href="/asistente/eventos" class="pb-btn pb-btn-ghost" style="text-decoration: none;">Ver detalle</a>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+        </section>
+    </main>
 </body>
 </html>

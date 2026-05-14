@@ -1,27 +1,48 @@
 // ============================================
 // Rutas del Asistente
-// ============================================
-// El controller del asistente esta pendiente de migracion a MySQL.
-// Por ahora estas rutas devuelven una pagina informativa para que el
-// servidor no falle al arrancar. Cuando se desarrolle el modulo del
-// asistente, se reemplaza este archivo por las rutas reales con su
-// controller migrado a mysql2 + bcryptjs (siguiendo el patron del admin).
+// Registro publico auto-aprobado + Login + Inscripciones a eventos
 // ============================================
 
 const express = require('express');
 const router = express.Router();
+const { requireAuth, requireRole } = require('../../middleware/authentication');
+const {
+    showLogin,
+    login,
+    logout,
+    showRegistro,
+    processRegistro,
+    showDashboard,
+    showEventos,
+    inscribirse,
+    cancelarInscripcion,
+    showCalendar
+} = require('../../controllers/asistente/asistenteController');
 
-// Stub temporal: cualquier ruta del asistente muestra "en desarrollo"
-function rutaEnDesarrollo(req, res) {
-    res.status(503).render('shared/error', {
-        title: 'Modulo en desarrollo',
-        message: 'El modulo del asistente esta en construccion. Pronto estara disponible.'
-    });
-}
+// ============================================
+// Rutas publicas
+// ============================================
+router.get('/login', showLogin);
+router.post('/login', login);
+router.get('/logout', logout);
 
-router.all('/login', rutaEnDesarrollo);
-router.all('/dashboard', rutaEnDesarrollo);
-router.all('/calendar', rutaEnDesarrollo);
-router.all('/registro', rutaEnDesarrollo);
+// Registro publico (auto-aprobado: el asistente puede usar la cuenta inmediatamente)
+router.get('/registro', showRegistro);
+router.post('/registro', processRegistro);
+
+// ============================================
+// Rutas protegidas (sesion + rol asistente)
+// ============================================
+const requireSession = [requireAuth, requireRole('asistente')];
+
+router.get('/dashboard', requireSession, showDashboard);
+router.get('/calendar', requireSession, showCalendar);
+
+// Catalogo de eventos disponibles + accion de inscribirse
+router.get('/eventos', requireSession, showEventos);
+router.post('/eventos/:id/inscribirse', requireSession, inscribirse);
+
+// Cancelar inscripcion (soft delete)
+router.post('/inscripciones/:id/cancelar', requireSession, cancelarInscripcion);
 
 module.exports = router;

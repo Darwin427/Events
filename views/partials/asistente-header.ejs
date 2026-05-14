@@ -1,0 +1,31 @@
+<div class="pb-header">
+    <div class="pb-header-brand">
+        <div class="pb-logo-mark">PB</div>
+        <div>
+            <div class="pb-logo-text">PORTAL ASISTENTE</div>
+            <div class="pb-logo-name"><%= typeof headerSubtitle !== 'undefined' ? headerSubtitle : 'Mi panel' %></div>
+        </div>
+    </div>
+    <nav class="pb-nav" aria-label="Navegacion principal">
+        <a href="/asistente/dashboard" class="pb-nav-link">Mi panel</a>
+        <a href="/asistente/eventos" class="pb-nav-link">Eventos</a>
+        <a href="/asistente/calendar" class="pb-nav-link">Calendario</a>
+    </nav>
+    <div class="pb-user">
+        <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+        <div class="pb-user-info">
+            <span class="pb-user-name"><%= session.userName || 'Asistente' %></span>
+            <a href="/asistente/logout" class="pb-user-link">Cerrar sesion</a>
+        </div>
+    </div>
+</div>
+<div class="pb-strip"></div>
+
+<% if (typeof mensaje !== 'undefined' && mensaje) { %>
+    <div class="pb-main" style="padding-top: 16px; padding-bottom: 0;">
+        <div class="pb-alert <%= mensaje.tipo === 'exito' ? 'pb-alert-success' : 'pb-alert-danger' %>">
+            <span><%= mensaje.tipo === 'exito' ? '✓' : '⚠️' %></span>
+            <span><%= mensaje.texto %></span>
+        </div>
+    </div>
+<% } %>

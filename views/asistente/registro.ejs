@@ -1,65 +1,91 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
+    <%- include('../partials/head') %>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/asistente/dashboard">
-                        <span class="initial">P</span>
-                        <span class="full-text">Panel Principal</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/asistente/calendar">
-                        <span class="initial">C</span>
-                        <span class="full-text">Calendario</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/asistente/registro">
-                        <span class="initial">R</span>
-                        <span class="full-text">Registros</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="initial">S</span>
-                        <span class="full-text">Salir</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    
-    <div class="main-container">
-        <header>
-            <h1>Registro a Eventos</h1>
-            <h2>Inscripción a Ponencias</h2>
-        </header>
-
-        <section class="content">
-            <p>Bienvenido al sistema de registro de eventos.</p>
-            <p>Aquí podrás:</p>
-            <ul>
-                <li>Inscribirte en las ponencias disponibles</li>
-                <li>Ver descripciones detalladas de cada evento</li>
-                <li>Consultar tu historial de inscripciones</li>
-                <li>Cancelar inscripciones si es necesario</li>
-            </ul>
-            
-            <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
-                <h3>Eventos Disponibles</h3>
-                <p>Las ponencias aprobadas y disponibles para inscripción aparecerán aquí.</p>
-                <p>Podrás leer la descripción y decidir cuáles te interesan.</p>
+    <div class="pb-login-bg">
+        <div class="pb-login-card" style="max-width: 460px;">
+            <div class="pb-header">
+                <div class="pb-header-brand">
+                    <div class="pb-logo-mark">PB</div>
+                    <div>
+                        <div class="pb-logo-text">INSTITUCION UNIVERSITARIA</div>
+                        <div class="pb-logo-name">PASCUAL BRAVO</div>
+                    </div>
+                </div>
             </div>
-        </section>
+            <div class="pb-strip"></div>
+
+            <div class="pb-login-body">
+                <h2 class="pb-login-title">Crear cuenta de Asistente</h2>
+                <p class="pb-login-sub">Tu cuenta queda activa inmediatamente, sin esperar aprobacion.</p>
+
+                <% if (error) { %>
+                    <div class="pb-alert pb-alert-danger">
+                        <span>⚠️</span>
+                        <span><%= error %></span>
+                    </div>
+                <% } %>
+
+                <% if (success) { %>
+                    <div class="pb-alert pb-alert-success">
+                        <span>✓</span>
+                        <span><%= success %></span>
+                    </div>
+                    <div style="text-align: center; margin-top: 16px;">
+                        <a href="/asistente/login" class="pb-btn pb-btn-primary pb-btn-full" style="text-decoration: none; display: inline-block;">Ir a iniciar sesion</a>
+                    </div>
+                <% } else { %>
+                    <form action="/asistente/registro" method="POST" novalidate>
+                        <div class="pb-field">
+                            <label for="nombre" class="pb-label">Nombre completo</label>
+                            <input type="text" id="nombre" name="nombre"
+                                   class="pb-input" placeholder="Juan Perez"
+                                   value="<%= form.nombre || '' %>"
+                                   minlength="3" maxlength="100"
+                                   autocomplete="name" required>
+                        </div>
+
+                        <div class="pb-field">
+                            <label for="email" class="pb-label">Correo electronico</label>
+                            <input type="email" id="email" name="email"
+                                   class="pb-input" placeholder="tu@correo.com"
+                                   value="<%= form.email || '' %>"
+                                   maxlength="150"
+                                   autocomplete="email" required>
+                        </div>
+
+                        <div class="pb-field">
+                            <label for="password" class="pb-label">Contrasena</label>
+                            <input type="password" id="password" name="password"
+                                   class="pb-input" placeholder="Minimo 8 caracteres"
+                                   minlength="8"
+                                   autocomplete="new-password" required>
+                            <small style="color: var(--neutral-500); font-size: 12px;">Al menos 8 caracteres.</small>
+                        </div>
+
+                        <div class="pb-field">
+                            <label for="passwordConfirm" class="pb-label">Confirmar contrasena</label>
+                            <input type="password" id="passwordConfirm" name="passwordConfirm"
+                                   class="pb-input" placeholder="Repite tu contrasena"
+                                   minlength="8"
+                                   autocomplete="new-password" required>
+                        </div>
+
+                        <button type="submit" class="pb-btn pb-btn-primary pb-btn-full">
+                            Crear cuenta
+                        </button>
+                    </form>
+                <% } %>
+
+                <div class="pb-login-footer">
+                    ¿Ya tienes cuenta? <a href="/asistente/login">Iniciar sesion</a>
+                    <br>
+                    <a href="/inicio" style="font-size: 12px;">← Volver al inicio</a>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
