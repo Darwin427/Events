@@ -108,13 +108,42 @@
         <!-- Si ya está aprobada: mostrar detalles del evento -->
         <% if (propuesta.Estado === 'aprobada' && propuesta.FechaDefinitiva) { %>
             <div class="pb-card pb-card-padded" style="margin-bottom: 16px; background: var(--state-success-soft);">
-                <h3 style="margin: 0 0 12px; color: #1B5E20;">✓ Detalles del evento aprobado</h3>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+                    <h3 style="margin: 0; color: #1B5E20;">✓ Detalles del evento aprobado</h3>
+                    <% if (typeof propuesta.EstadoEvento !== 'undefined' && propuesta.EstadoEvento === 'cancelado') { %>
+                        <span class="pb-pill pb-pill-cancelled">Evento cancelado</span>
+                    <% } %>
+                </div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; font-size: 14px; color: #1B5E20;">
                     <div><strong>Fecha:</strong> <%= formatDate(propuesta.FechaDefinitiva) %></div>
                     <div><strong>Hora:</strong> <%= propuesta.HoraInicio %> — <%= propuesta.HoraFin %></div>
                     <div><strong>Lugar:</strong> <%= propuesta.Lugar %></div>
                     <div><strong>Cupo máximo:</strong> <%= propuesta.CupoMaximo %> personas</div>
                 </div>
+
+                <% if (typeof propuesta.MotivoCancelacion !== 'undefined' && propuesta.MotivoCancelacion) { %>
+                    <div style="margin-top: 14px; padding: 10px 12px; background: var(--state-danger-soft); border-radius: var(--radius-sm); color: #B71C1C;">
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">Motivo de la cancelación</div>
+                        <div style="font-size: 13px;"><%= propuesta.MotivoCancelacion %></div>
+                    </div>
+                <% } else if (typeof propuesta.EstadoEvento === 'undefined' || propuesta.EstadoEvento === 'activo') { %>
+                    <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
+                        <a href="/admin/eventos/<%= propuesta.IdEvento %>/editar" class="pb-btn pb-btn-ghost" style="text-decoration: none; background: var(--neutral-0);">Editar evento</a>
+                        <button type="button" class="pb-btn pb-btn-danger" onclick="document.getElementById('formCancelarEvento').style.display = 'block';">Cancelar evento</button>
+                    </div>
+
+                    <form id="formCancelarEvento" action="/admin/eventos/<%= propuesta.IdEvento %>/cancelar" method="POST" novalidate
+                          style="display: none; margin-top: 14px; padding: 14px; background: var(--neutral-0); border-radius: var(--radius-sm);"
+                          onsubmit="return confirm('¿Confirmas la cancelación del evento? El ponente será notificado en su dashboard.');">
+                        <label for="motivoCancelacion" class="pb-label" style="color: var(--state-danger);">Motivo de la cancelación *</label>
+                        <textarea id="motivoCancelacion" name="motivoCancelacion" class="pb-input" rows="3" required
+                                  placeholder="Ej. Suspendido por restricción sanitaria. Pendiente reprogramación..."></textarea>
+                        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">
+                            <button type="button" class="pb-btn pb-btn-ghost" onclick="document.getElementById('formCancelarEvento').style.display = 'none';">Volver</button>
+                            <button type="submit" class="pb-btn pb-btn-danger">Confirmar cancelación</button>
+                        </div>
+                    </form>
+                <% } %>
             </div>
         <% } %>
 

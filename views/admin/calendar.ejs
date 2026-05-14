@@ -1,65 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
+    <%- include('../partials/head') %>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/admin/dashboard">
-                        <span class="initial">P</span>
-                        <span class="full-text">Panel Principal</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/calendar">
-                        <span class="initial">C</span>
-                        <span class="full-text">Calendario</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/ponencias">
-                        <span class="initial">P</span>
-                        <span class="full-text">Ponencias</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="initial">S</span>
-                        <span class="full-text">Salir</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    
-    <div class="main-container">
-        <header>
-            <h1>Calendario de Eventos</h1>
-            <h2>Gestión de Fechas y Horarios</h2>
-        </header>
-
-        <section class="content">
-            <p>Bienvenido al calendario de administración.</p>
-            <p>Desde aquí podrás:</p>
-            <ul>
-                <li>Ver los días disponibles para asignar eventos</li>
-                <li>Consultar el calendario de eventos próximos</li>
-                <li>Programar nuevas actividades</li>
-                <li>Evitar conflictos de horarios</li>
-            </ul>
-            
-            <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
-                <h3>Calendario Interactivo</h3>
-                <p>El calendario completo estará disponible cuando se conecte la base de datos.</p>
-                <p>Por ahora, esta es una vista de demostración.</p>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ADMIN</div>
+                <div class="pb-logo-name">Calendario</div>
             </div>
-        </section>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Administrador' %></span>
+                <a href="/admin/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
     </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main">
+        <div style="margin-bottom: 20px;">
+            <a href="/admin/dashboard" style="font-size: 13px;">← Volver al dashboard</a>
+            <h1 style="margin: 12px 0 6px;">Calendario de eventos</h1>
+            <p style="color: var(--neutral-500); margin: 0;">
+                <%= totalEventos %> <%= totalEventos === 1 ? 'evento programado' : 'eventos programados' %> en este mes.
+                Click sobre un evento para ver el detalle.
+            </p>
+        </div>
+
+        <% const nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']; %>
+
+        <!-- Header de navegacion mes -->
+        <div class="pb-cal-header">
+            <div class="pb-cal-nav">
+                <a href="/admin/calendar?mes=<%= nav.prevMes %>&anio=<%= nav.prevAnio %>" class="pb-cal-nav-btn" title="Mes anterior">‹</a>
+                <div class="pb-cal-title"><%= nombresMeses[mes - 1] %> <%= anio %></div>
+                <a href="/admin/calendar?mes=<%= nav.nextMes %>&anio=<%= nav.nextAnio %>" class="pb-cal-nav-btn" title="Mes siguiente">›</a>
+            </div>
+            <% if (!esMesActual) { %>
+                <a href="/admin/calendar" class="pb-btn pb-btn-ghost" style="text-decoration: none; font-size: 13px;">Volver al mes actual</a>
+            <% } %>
+        </div>
+
+        <!-- Leyenda -->
+        <div style="display: flex; gap: 16px; margin-bottom: 12px; font-size: 12px; color: var(--neutral-500);">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span style="width: 12px; height: 12px; background: var(--state-success-soft); border-left: 3px solid var(--state-success); border-radius: 2px;"></span>
+                Evento activo
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span style="width: 12px; height: 12px; background: var(--neutral-100); border-left: 3px solid var(--neutral-300); border-radius: 2px;"></span>
+                Evento cancelado
+            </span>
+            <% if (esMesActual) { %>
+                <span style="display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="width: 12px; height: 12px; background: var(--brand-accent); border-radius: 50%;"></span>
+                    Hoy
+                </span>
+            <% } %>
+        </div>
+
+        <!-- Grilla del calendario -->
+        <div class="pb-cal-grid">
+            <!-- Encabezados de dias de la semana -->
+            <div class="pb-cal-weekday">Lun</div>
+            <div class="pb-cal-weekday">Mar</div>
+            <div class="pb-cal-weekday">Mié</div>
+            <div class="pb-cal-weekday">Jue</div>
+            <div class="pb-cal-weekday">Vie</div>
+            <div class="pb-cal-weekday">Sáb</div>
+            <div class="pb-cal-weekday">Dom</div>
+
+            <!-- Celdas vacias antes del primer dia del mes -->
+            <% for (let i = 0; i < primerDiaSemana; i++) { %>
+                <div class="pb-cal-day pb-cal-day-empty"></div>
+            <% } %>
+
+            <!-- Celdas de dias del mes -->
+            <% for (let dia = 1; dia <= diasMes; dia++) { %>
+                <% const esHoy = esMesActual && dia === hoy; %>
+                <div class="pb-cal-day <%= esHoy ? 'pb-cal-day-today' : '' %>">
+                    <span class="pb-cal-day-number"><%= dia %></span>
+                    <% if (eventosPorDia[dia]) { %>
+                        <% eventosPorDia[dia].forEach(function(e) { %>
+                            <% const horaCorta = e.HoraInicio.substring(0, 5); %>
+                            <% const cancelado = e.EstadoEvento === 'cancelado'; %>
+                            <a href="/admin/propuestas/<%= e.IdPropuesta %>"
+                               class="pb-cal-event <%= cancelado ? 'pb-cal-event-cancelled' : '' %>"
+                               title="<%= horaCorta %> · <%= e.Tema %> · <%= e.Lugar %> (<%= e.PonenteNombre %>)">
+                                <%= horaCorta %> <%= e.Tema %>
+                            </a>
+                        <% }); %>
+                    <% } %>
+                </div>
+            <% } %>
+
+            <!-- Celdas vacias al final para completar la grilla -->
+            <% const totalCeldas = primerDiaSemana + diasMes; const restantes = (7 - (totalCeldas % 7)) % 7; %>
+            <% for (let i = 0; i < restantes; i++) { %>
+                <div class="pb-cal-day pb-cal-day-empty"></div>
+            <% } %>
+        </div>
+    </main>
 </body>
 </html>

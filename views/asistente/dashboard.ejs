@@ -1,48 +1,81 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/Modelo.css">
+    <%- include('../partials/head') %>
 </head>
 <body>
-    <aside class="sidebar">
-        <nav>
-            <ul>
-                <li>
-                    <a href="/asistente/calendar">
-                        <span class="initial">C</span>
-                        <span class="full-text">Calendario</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/asistente/registro">
-                        <span class="initial">R</span>
-                        <span class="full-text">Registros</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="initial">S</span>
-                        <span class="full-text">Salir</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    
-    <div class="main-container">
-        <header>
-            <h1>Página de eventos de la Institución Universitaria Pascual Bravo</h1>
-            <h2>Siempre mejorando tu experiencia</h2>
-        </header>
-
-        <section class="content">
-            <p>Bienvenido asistente a tu página principal, en la barra lateral encontraras las siguientes opciones:</p>
-            <p>1. Calendario: podrás tener conocimiento de los eventos siguientes y sus fechas</p>
-            <p>2. Inscripción a ponencias: Acá podrás registrarte en eventos al igual que ver una breve descripción de ellos para elegir el que mas te gusté</p>
-        </section>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ASISTENTE</div>
+                <div class="pb-logo-name">Mis eventos</div>
+            </div>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Asistente' %></span>
+                <a href="/asistente/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
     </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main">
+        <div style="margin-bottom: 28px;">
+            <h1 style="margin: 0;">Hola, <%= session.userName || 'Asistente' %></h1>
+            <p style="color: var(--neutral-500); margin: 6px 0 0;">Bienvenido al portal del asistente del sistema Events.</p>
+        </div>
+
+        <div class="pb-card pb-card-padded" style="text-align: center; padding: 56px 32px;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--brand-secondary-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1E88E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+            </div>
+            <h3 style="margin: 0 0 8px;">Bienvenido al portal del asistente</h3>
+            <p style="color: var(--neutral-500); max-width: 480px; margin: 0 auto 6px;">
+                Aquí podrás consultar los eventos disponibles, inscribirte a ellos y llevar control de tus participaciones.
+            </p>
+            <p style="color: var(--neutral-500); margin: 0; font-size: 13px;">
+                Las funcionalidades del módulo están en desarrollo.
+            </p>
+        </div>
+
+        <!-- Placeholder de secciones pendientes -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px;">
+
+            <div class="pb-card pb-card-padded" style="opacity: 0.7;">
+                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-success-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <h3 style="margin: 0 0 6px;">Eventos disponibles</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0 0 8px;">Consulta y inscríbete a eventos académicos próximos.</p>
+                <span class="pb-pill pb-pill-pending">Próximamente</span>
+            </div>
+
+            <div class="pb-card pb-card-padded" style="opacity: 0.7;">
+                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--brand-accent-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </div>
+                <h3 style="margin: 0 0 6px;">Mis inscripciones</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0 0 8px;">Lleva control de los eventos a los que te inscribiste.</p>
+                <span class="pb-pill pb-pill-pending">Próximamente</span>
+            </div>
+
+            <div class="pb-card pb-card-padded" style="opacity: 0.7;">
+                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--brand-secondary-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E88E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <h3 style="margin: 0 0 6px;">Calendario</h3>
+                <p style="font-size: 13px; color: var(--neutral-500); margin: 0 0 8px;">Visualiza por mes los eventos a los que asistirás.</p>
+                <span class="pb-pill pb-pill-pending">Próximamente</span>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

@@ -16,6 +16,9 @@ const {
     aprobarPropuesta,
     rechazarPropuesta,
     descargarDocumento,
+    showEventEditForm,
+    updateEvent,
+    cancelEvent,
     showSolicitudes,
     aprobarPonente,
     rechazarPonente,
@@ -39,6 +42,11 @@ router.get('/propuestas/:id', requireSession, showPropuestaReview);
 router.post('/propuestas/:id/aprobar', requireSession, aprobarPropuesta);
 router.post('/propuestas/:id/rechazar', requireSession, rechazarPropuesta);
 router.get('/propuestas/:id/documentos/:docId', requireSession, descargarDocumento);
+
+// Gestion de eventos aprobados (editar y cancelar)
+router.get('/eventos/:id/editar', requireSession, showEventEditForm);
+router.post('/eventos/:id/editar', requireSession, updateEvent);
+router.post('/eventos/:id/cancelar', requireSession, cancelEvent);
 
 // Compatibilidad: /ponencias redirige a /propuestas
 router.get('/ponencias', requireSession, (req, res) => res.redirect('/admin/propuestas'));
