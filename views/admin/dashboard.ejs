@@ -23,37 +23,116 @@
     <div class="pb-strip"></div>
 
     <main class="pb-main">
-        <div style="margin-bottom: 28px;">
+
+        <!-- Encabezado -->
+        <div style="margin-bottom: 24px;">
             <h1 style="margin: 0;">Hola, <%= session.userName || 'Administrador' %></h1>
-            <p style="color: var(--neutral-500); margin: 6px 0 0;">Panel de administración del sistema Events.</p>
+            <p style="color: var(--neutral-500); margin: 6px 0 0;">Resumen del sistema de eventos académicos.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        <!-- Fila de métricas -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 32px;">
 
-            <a href="/admin/solicitudes" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; transition: transform .12s, box-shadow .15s; display: block;">
-                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-warning-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <a href="/admin/solicitudes" class="pb-card" style="text-decoration: none; color: inherit; padding: 20px; display: block; transition: transform .12s, box-shadow .15s; border-top: 3px solid <%= metricas.solicitudesPendientes > 0 ? 'var(--state-warning)' : 'var(--neutral-300)' %>;">
+                <div style="font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 8px;">Solicitudes pendientes</div>
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="font-size: 32px; font-weight: 700; color: <%= metricas.solicitudesPendientes > 0 ? 'var(--state-warning)' : 'var(--neutral-700)' %>; line-height: 1;"><%= metricas.solicitudesPendientes %></span>
+                    <span style="font-size: 12px; color: var(--neutral-500);"><%= metricas.solicitudesPendientes === 1 ? 'cuenta' : 'cuentas' %></span>
                 </div>
-                <h3 style="margin: 0 0 6px;">Gestión de ponentes</h3>
-                <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Aprueba solicitudes de cuenta, gestiona ponentes activos.</p>
             </a>
 
-            <a href="/admin/ponencias" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; transition: transform .12s, box-shadow .15s; display: block;">
-                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--brand-secondary-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E88E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <a href="/admin/propuestas?estado=pendiente" class="pb-card" style="text-decoration: none; color: inherit; padding: 20px; display: block; transition: transform .12s, box-shadow .15s; border-top: 3px solid <%= metricas.propuestasPendientes > 0 ? 'var(--brand-accent)' : 'var(--neutral-300)' %>;">
+                <div style="font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 8px;">Propuestas por revisar</div>
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="font-size: 32px; font-weight: 700; color: <%= metricas.propuestasPendientes > 0 ? '#8A4500' : 'var(--neutral-700)' %>; line-height: 1;"><%= metricas.propuestasPendientes %></span>
+                    <span style="font-size: 12px; color: var(--neutral-500);"><%= metricas.propuestasPendientes === 1 ? 'propuesta' : 'propuestas' %></span>
                 </div>
-                <h3 style="margin: 0 0 6px;">Propuestas de eventos</h3>
-                <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Revisa, aprueba o rechaza las propuestas enviadas por los ponentes.</p>
             </a>
 
-            <a href="/admin/calendar" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; transition: transform .12s, box-shadow .15s; display: block;">
-                <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-success-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <a href="/admin/calendar" class="pb-card" style="text-decoration: none; color: inherit; padding: 20px; display: block; transition: transform .12s, box-shadow .15s; border-top: 3px solid var(--state-success);">
+                <div style="font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 8px;">Eventos próximos</div>
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="font-size: 32px; font-weight: 700; color: var(--state-success); line-height: 1;"><%= metricas.eventosProximos %></span>
+                    <span style="font-size: 12px; color: var(--neutral-500);"><%= metricas.eventosProximos === 1 ? 'evento' : 'eventos' %></span>
                 </div>
-                <h3 style="margin: 0 0 6px;">Calendario</h3>
-                <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Visualiza los eventos programados y disponibilidad de salas.</p>
+            </a>
+
+            <a href="/admin/solicitudes" class="pb-card" style="text-decoration: none; color: inherit; padding: 20px; display: block; transition: transform .12s, box-shadow .15s; border-top: 3px solid var(--brand-secondary);">
+                <div style="font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--neutral-500); font-weight: 600; margin-bottom: 8px;">Ponentes activos</div>
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                    <span style="font-size: 32px; font-weight: 700; color: var(--brand-secondary); line-height: 1;"><%= metricas.ponentesActivos %></span>
+                    <span style="font-size: 12px; color: var(--neutral-500);"><%= metricas.ponentesActivos === 1 ? 'ponente' : 'ponentes' %></span>
+                </div>
             </a>
         </div>
+
+        <!-- Próximos eventos -->
+        <section style="margin-bottom: 36px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h2 style="margin: 0;">Próximos eventos</h2>
+                <a href="/admin/calendar" style="font-size: 13px;">Ver calendario completo →</a>
+            </div>
+
+            <% if (proximosEventos.length === 0) { %>
+                <div class="pb-card pb-card-padded" style="text-align: center; color: var(--neutral-500); padding: 32px;">
+                    <p style="margin: 0;">No hay eventos próximos programados.</p>
+                    <p style="font-size: 13px; margin: 6px 0 0;">Aprueba una propuesta pendiente para crear un evento.</p>
+                </div>
+            <% } else { %>
+                <% proximosEventos.forEach(function(e) { %>
+                    <a href="/admin/propuestas/<%= e.IdPropuesta %>" class="pb-card" style="text-decoration: none; color: inherit; padding: 14px 18px; margin-bottom: 8px; display: flex; align-items: center; gap: 16px; transition: background .15s; border-left: 4px solid var(--state-success);">
+                        <div style="background: var(--state-success-soft); border-radius: var(--radius-md); padding: 8px 12px; min-width: 64px; text-align: center;">
+                            <div style="font-size: 18px; font-weight: 700; color: #1B5E20; line-height: 1;">
+                                <%= new Date(e.FechaDefinitiva).getDate() %>
+                            </div>
+                            <div style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #1B5E20; margin-top: 2px;">
+                                <%= new Date(e.FechaDefinitiva).toLocaleDateString('es-CO', { month: 'short' }).replace('.', '') %>
+                            </div>
+                        </div>
+                        <div style="flex-grow: 1;">
+                            <div style="font-size: 15px; font-weight: 600; color: var(--brand-primary); margin-bottom: 2px;"><%= e.Tema %></div>
+                            <div style="font-size: 13px; color: var(--neutral-500);">
+                                <%= e.PonenteNombre %> · <%= e.HoraInicio %> — <%= e.HoraFin %> · <%= e.Lugar %>
+                            </div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--neutral-500); text-align: right;">
+                            Cupo<br><strong style="color: var(--neutral-900); font-size: 14px;"><%= e.CupoMaximo %></strong>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } %>
+        </section>
+
+        <!-- Accesos directos -->
+        <section>
+            <h2 style="margin: 0 0 14px;">Módulos</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+
+                <a href="/admin/solicitudes" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; display: block;">
+                    <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-warning-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8A4500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                    </div>
+                    <h3 style="margin: 0 0 6px;">Gestión de ponentes</h3>
+                    <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Aprueba solicitudes y gestiona ponentes activos.</p>
+                </a>
+
+                <a href="/admin/propuestas" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; display: block;">
+                    <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--brand-secondary-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E88E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <h3 style="margin: 0 0 6px;">Propuestas de eventos</h3>
+                    <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Revisa, aprueba o rechaza propuestas enviadas.</p>
+                </a>
+
+                <a href="/admin/calendar" class="pb-card pb-card-padded" style="text-decoration: none; color: inherit; display: block;">
+                    <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--state-success-soft); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B5E20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <h3 style="margin: 0 0 6px;">Calendario</h3>
+                    <p style="font-size: 13px; color: var(--neutral-500); margin: 0;">Visualiza los eventos aprobados por mes.</p>
+                </a>
+            </div>
+        </section>
     </main>
 </body>
 </html>

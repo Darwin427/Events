@@ -225,6 +225,7 @@ async function showDashboard(req, res) {
                 p.IdPropuesta, p.NombreEmpresa, p.Tema, p.IdeaPrincipal, p.Vision,
                 p.AlcanceEsperado, p.FechaTentativa, p.Estado, p.MotivoRechazo, p.FechaEnvio,
                 e.FechaDefinitiva, e.HoraInicio, e.HoraFin, e.Lugar, e.CupoMaximo,
+                e.Estado AS EstadoEvento, e.MotivoCancelacion AS MotivoCancelacionEvento,
                 (SELECT COUNT(*) FROM DocumentosPropuesta WHERE IdPropuesta = p.IdPropuesta) AS NumDocumentos
              FROM Propuestas p
              LEFT JOIN Eventos e ON e.IdPropuesta = p.IdPropuesta
@@ -333,7 +334,8 @@ async function showProposalDetail(req, res) {
         const [propuestas] = await pool.query(
             `SELECT
                 p.*,
-                e.FechaDefinitiva, e.HoraInicio, e.HoraFin, e.Lugar, e.CupoMaximo
+                e.FechaDefinitiva, e.HoraInicio, e.HoraFin, e.Lugar, e.CupoMaximo,
+                e.Estado AS EstadoEvento, e.MotivoCancelacion AS MotivoCancelacionEvento
              FROM Propuestas p
              LEFT JOIN Eventos e ON e.IdPropuesta = p.IdPropuesta
              WHERE p.IdPropuesta = ? AND p.IdPonente = ?`,

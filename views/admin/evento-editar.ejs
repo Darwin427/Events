@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <div class="pb-header">
+        <div class="pb-header-brand">
+            <div class="pb-logo-mark">PB</div>
+            <div>
+                <div class="pb-logo-text">PORTAL ADMIN</div>
+                <div class="pb-logo-name">Editar evento</div>
+            </div>
+        </div>
+        <div class="pb-user">
+            <div class="pb-avatar"><%= (session.userName || 'A').charAt(0).toUpperCase() %></div>
+            <div class="pb-user-info">
+                <span class="pb-user-name"><%= session.userName || 'Administrador' %></span>
+                <a href="/admin/logout" class="pb-user-link">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div class="pb-strip"></div>
+
+    <main class="pb-main" style="max-width: 760px;">
+        <div style="margin-bottom: 20px;">
+            <a href="/admin/propuestas/<%= evento.IdPropuesta %>" style="font-size: 13px;">← Volver al detalle de la propuesta</a>
+            <h1 style="margin: 12px 0 6px;">Editar evento</h1>
+            <p style="color: var(--neutral-500); margin: 0;"><%= evento.Tema %> · <%= evento.PonenteNombre %></p>
+        </div>
+
+        <% if (error) { %>
+            <div class="pb-alert pb-alert-danger">
+                <span>⚠️</span>
+                <span><%= error %></span>
+            </div>
+        <% } %>
+
+        <form action="/admin/eventos/<%= evento.IdEvento %>/editar" method="POST" novalidate>
+            <div class="pb-card pb-card-padded" style="margin-bottom: 16px;">
+                <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--brand-primary); font-weight: 700; margin-bottom: 14px;">Datos del evento</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="pb-field">
+                        <label for="fechaDefinitiva" class="pb-label">Fecha definitiva *</label>
+                        <input type="date" id="fechaDefinitiva" name="fechaDefinitiva" class="pb-input" required
+                               value="<%= evento.FechaDefinitiva || evento.fechaDefinitiva || '' %>">
+                    </div>
+                    <div class="pb-field">
+                        <label for="cupoMaximo" class="pb-label">Cupo máximo *</label>
+                        <input type="number" id="cupoMaximo" name="cupoMaximo" class="pb-input" required min="1"
+                               value="<%= evento.CupoMaximo || evento.cupoMaximo || '' %>">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="pb-field">
+                        <label for="horaInicio" class="pb-label">Hora de inicio *</label>
+                        <input type="time" id="horaInicio" name="horaInicio" class="pb-input" required
+                               value="<%= evento.HoraInicio || evento.horaInicio || '' %>">
+                    </div>
+                    <div class="pb-field">
+                        <label for="horaFin" class="pb-label">Hora de fin *</label>
+                        <input type="time" id="horaFin" name="horaFin" class="pb-input" required
+                               value="<%= evento.HoraFin || evento.horaFin || '' %>">
+                    </div>
+                </div>
+
+                <div class="pb-field" style="margin-bottom: 0;">
+                    <label for="lugar" class="pb-label">Lugar *</label>
+                    <input type="text" id="lugar" name="lugar" class="pb-input" required maxlength="200"
+                           value="<%= evento.Lugar || evento.lugar || '' %>"
+                           placeholder="Ej. Auditorio Principal, Salón A-301...">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <a href="/admin/propuestas/<%= evento.IdPropuesta %>" class="pb-btn pb-btn-ghost" style="text-decoration: none;">Cancelar</a>
+                <button type="submit" class="pb-btn pb-btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

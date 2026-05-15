@@ -27,6 +27,14 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+// Middleware de flash messages (notificaciones toast)
+// Lee req.session.flash, lo pasa a las vistas y lo borra para que solo se vea una vez.
+app.use((req, res, next) => {
+    res.locals.flash = req.session.flash || null;
+    if (req.session.flash) delete req.session.flash;
+    next();
+});
+
 // Configuración de EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));

@@ -24,7 +24,23 @@
                     <%= propuesta.NombreEmpresa ? propuesta.NombreEmpresa : 'Universidad Pascual Bravo (interno)' %>
                 </p>
 
-                <% if (propuesta.Estado === 'aprobada' && propuesta.FechaDefinitiva) { %>
+                <% if (propuesta.Estado === 'aprobada' && propuesta.FechaDefinitiva && propuesta.EstadoEvento === 'cancelado') { %>
+                    <div style="background: var(--state-danger-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 20px;">
+                        <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #B71C1C; font-weight: 700; margin-bottom: 10px;">⚠ Evento cancelado por el administrador</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 24px; font-size: 14px; color: #B71C1C; text-decoration: line-through; margin-bottom: 12px;">
+                            <div><span style="opacity: 0.7;">Fecha:</span> <strong><%= formatDate(propuesta.FechaDefinitiva) %></strong></div>
+                            <div><span style="opacity: 0.7;">Hora:</span> <strong><%= propuesta.HoraInicio %> — <%= propuesta.HoraFin %></strong></div>
+                            <div><span style="opacity: 0.7;">Lugar:</span> <strong><%= propuesta.Lugar %></strong></div>
+                            <div><span style="opacity: 0.7;">Cupo:</span> <strong><%= propuesta.CupoMaximo %> personas</strong></div>
+                        </div>
+                        <% if (propuesta.MotivoCancelacionEvento) { %>
+                            <div style="padding: 10px 12px; background: var(--neutral-0); border-radius: var(--radius-sm);">
+                                <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--state-danger); font-weight: 700; margin-bottom: 4px;">Motivo de la cancelación</div>
+                                <div style="font-size: 13px; color: var(--neutral-900);"><%= propuesta.MotivoCancelacionEvento %></div>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else if (propuesta.Estado === 'aprobada' && propuesta.FechaDefinitiva) { %>
                     <div style="background: var(--state-success-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 20px;">
                         <div style="font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #1B5E20; font-weight: 700; margin-bottom: 10px;">✓ Detalles del evento aprobado</div>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 24px; font-size: 14px; color: #1B5E20;">
